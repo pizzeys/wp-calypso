@@ -9,9 +9,10 @@ import classNames from 'classnames';
 /**
  * Internal dependencies
  */
+import Spinner from 'components/spinner';
 import QuerySites from 'components/data/query-sites';
 import { getSite } from 'state/sites/selectors';
-import { getSiteIconUrl } from 'state/selectors';
+import { getSiteIconUrl, getSiteIconId, isTransientMedia } from 'state/selectors';
 import resizeImageUrl from 'lib/resize-image-url';
 import Gridicon from 'components/gridicon';
 
@@ -29,17 +30,20 @@ const SiteIcon = React.createClass( {
 		imgSize: React.PropTypes.number,
 		siteId: React.PropTypes.number,
 		site: React.PropTypes.object,
-		size: React.PropTypes.number
+		size: React.PropTypes.number,
+		iconUrl: React.PropTypes.string,
+		isTransientIcon: React.PropTypes.bool
 	},
 
 	render() {
-		const { site, siteId, iconUrl, imgSize } = this.props;
+		const { site, siteId, iconUrl, imgSize, isTransientIcon } = this.props;
 
 		const iconSrc = resizeImageUrl( iconUrl, imgSize );
 
 		const iconClasses = classNames( {
 			'site-icon': true,
-			'is-blank': ! iconSrc
+			'is-blank': ! iconSrc,
+			'is-transient': isTransientIcon
 		} );
 
 		// Size inline styles
@@ -57,6 +61,7 @@ const SiteIcon = React.createClass( {
 					? <img className="site-icon__img" src={ iconSrc } />
 					: <Gridicon icon="globe" size={ Math.round( this.props.size / 1.3 ) } />
 				}
+				{ isTransientIcon && <Spinner /> }
 			</div>
 		);
 	}
@@ -76,8 +81,11 @@ export default connect( ( state, { site, siteId, imgSize } ) => {
 		};
 	}
 
+	const iconId = getSiteIconId( state, stateSite.ID );
+
 	return {
 		site: stateSite,
+		isTransientIcon: isTransientMedia( state, stateSite.ID, iconId ),
 		iconUrl: getSiteIconUrl( state, stateSite.ID, imgSize )
 	};
 } )( SiteIcon );
