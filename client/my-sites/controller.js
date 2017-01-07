@@ -13,6 +13,7 @@ import { uniq } from 'lodash';
 import userFactory from 'lib/user';
 import sitesFactory from 'lib/sites-list';
 import { receiveSite } from 'state/sites/actions';
+import { getSite } from 'state/sites/selectors';
 import {
 	setSelectedSiteId,
 	setSection,
@@ -169,7 +170,9 @@ module.exports = {
 		const onSelectedSiteAvailable = () => {
 			const selectedSite = sites.getSelectedSite();
 			siteStatsStickyTabActions.saveFilterAndSlug( false, selectedSite.slug );
-			context.store.dispatch( receiveSite( selectedSite ) );
+			if ( ! getSite( context.store.getState(), selectedSite.ID ) ) {
+				context.store.dispatch( receiveSite( selectedSite ) );
+			}
 			context.store.dispatch( setSelectedSiteId( selectedSite.ID ) );
 
 			// Update recent sites preference
