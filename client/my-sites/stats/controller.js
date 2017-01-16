@@ -342,8 +342,6 @@ module.exports = {
 				stat_fields: 'views,visitors,likes,comments,post_titles', domain: siteDomain } );
 			const postsPagesList = new StatsList( {
 				siteID: siteId, statType: 'statsTopPosts', period: activeFilter.period, date: endDate, domain: siteDomain } );
-			const referrersList = new StatsList( {
-				siteID: siteId, statType: 'statsReferrers', period: activeFilter.period, date: endDate, domain: siteDomain } );
 			const clicksList = new StatsList( {
 				siteID: siteId, statType: 'statsClicks', period: activeFilter.period, date: endDate, domain: siteDomain } );
 			const authorsList = new StatsList( {
@@ -372,7 +370,6 @@ module.exports = {
 				activeTabVisitsList,
 				visitsList,
 				postsPagesList,
-				referrersList,
 				clicksList,
 				authorsList,
 				videoPlaysList,
@@ -492,9 +489,7 @@ module.exports = {
 					break;
 
 				case 'referrers':
-					summaryList = new StatsList( {
-						siteID: siteId, statType: 'statsReferrers', period: activeFilter.period,
-						date: endDate, max: 0, domain: siteDomain } );
+					summaryList = fakeStatsList;
 					break;
 
 				case 'clicks':
