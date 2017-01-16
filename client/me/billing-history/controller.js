@@ -19,13 +19,12 @@ const sites = sitesFactory();
 export default {
 	billingHistory( context ) {
 		const BillingHistoryComponent = require( './main' );
-		const billingData = require( 'lib/billing-history-data' );
 		const basePath = route.sectionify( context.path );
 
 		context.store.dispatch( setTitle( i18n.translate( 'Billing History', { textOnly: true } ) ) ); // FIXME: Auto-converted from the Flux setTitle action. Please use <DocumentHead> instead.
 
 		renderWithReduxStore(
-			React.createElement( BillingHistoryComponent, { billingData: billingData, sites: sites } ),
+			React.createElement( BillingHistoryComponent, { sites: sites } ),
 			document.getElementById( 'primary' ),
 			context.store
 		);
